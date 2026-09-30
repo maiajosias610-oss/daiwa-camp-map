@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#cfe3f7" />
+  <title>带娃去哪儿 · 广州周边亲子出行参考</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=20260930c" />
+</head>
+<body>
+<div class="phone-shell">
+  <div class="app">
+
+    <!-- 顶部：扁平星型logo + 黑色大标题 -->
+    <header class="hero">
+      <div class="hero-row">
+        <svg class="logo-star" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2l2.9 6.26 6.6 1.04-4.75 4.63 1.05 6.57L12 17.3 6.2 20.5l1.05-6.57L2.5 9.3l6.6-1.04L12 2z"/>
+        </svg>
+        <h1 class="hero-title">带娃去哪儿</h1>
+      </div>
+      <p class="hero-sub">周末遛娃 · 附近露营好去处按距离推荐</p>
+    </header>
+
+    <!-- 胶囊标签组（扁平图标） -->
+    <nav class="pills" id="viewPills">
+      <button data-tab="rec" class="pill on"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>推荐</button>
+      <button data-tab="all" class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg>全部</button>
+      <button data-tab="lib" class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M3 4h7a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H3zM21 4h-7a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7z"/></svg>文章库</button>
+      <button data-tab="trip" class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8v10H5V10h14z"/></svg>行程</button>
+    </nav>
+
+    <div id="remindBar"></div>
+
+    <!-- TAB: 推荐（首页） -->
+    <section id="tab-rec" class="tabpane">
+      <div class="locbar glass">
+        <button id="btnLocate" class="btn-create small"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>定位</button>
+        <span id="locStatus" class="loc-status">还没定位，按默认顺序</span>
+        <button id="btnOriginEdit" class="pill small">换地点</button>
+      </div>
+      <div id="originPanel" class="glass origin-panel" hidden>
+        <div class="op-row">
+          <input id="originInput" type="text" placeholder="填地址，如：天河区体育西路" />
+          <button id="originSave" class="btn-create small">保存</button>
+        </div>
+        <div class="origin-quick" id="originQuick"></div>
+        <span id="originHint" class="small dim">定位或选快捷地点后，推荐按「离你最近」排序</span>
+      </div>
+
+      <div class="mgrid" id="homeGrid"></div>
+
+      <div class="sec-head">
+        <h2>附近的地点</h2>
+        <button class="pill small" data-goto="all">查看全部</button>
+      </div>
+      <div class="mgrid" id="nearGrid"></div>
+    </section>
+
+    <!-- TAB: 全部地点 -->
+    <section id="tab-all" class="tabpane" hidden>
+      <div class="filters">
+        <input id="searchInput" type="search" placeholder="搜地点，如：华农 / 免费 / 喂牛" />
+        <select id="regionSelect">
+          <option value="">全部地区</option>
+        </select>
+        <select id="sortSelect">
+          <option value="default">默认排序</option>
+          <option value="cheap">免费优先</option>
+        </select>
+        <div id="filterChips"></div>
+      </div>
+      <p id="spotCount" class="small dim"></p>
+      <section id="spotGrid" class="grid"></section>
+    </section>
+
+    <!-- TAB: 文章库 -->
+    <section id="tab-lib" class="tabpane" hidden>
+      <section class="library glass">
+        <div class="lib-head">
+          <h2><svg class="ic" viewBox="0 0 24 24"><path d="M3 4h7a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H3zM21 4h-7a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7z"/></svg> 文章库 <span id="libCount" class="lib-count"></span></h2>
+          <div class="lib-tools">
+            <input id="libSearch" type="search" placeholder="搜标题，如：溯溪 / 青岛" />
+            <select id="libRegion">
+              <option value="gd">广东省内</option>
+              <option value="all">全部</option>
+              <option value="out">省外</option>
+            </select>
+          </div>
+        </div>
+        <p class="lib-note">全部文章都在这里（含省外 64 篇）；点标题看微信原文。</p>
+        <ul id="libList" class="lib-list"></ul>
+        <button id="libMore" class="btn-create small" style="margin-top:8px">加载更多</button>
+      </section>
+    </section>
+
+    <!-- TAB: 行程（含出行清单） -->
+    <section id="tab-trip" class="tabpane" hidden>
+      <section class="trips glass">
+        <h2>出行清单</h2>
+        <div id="checklistBox"></div>
+      </section>
+      <section class="trips glass">
+        <h2><svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8v10H5V10h14z"/></svg> 我的行程 &amp; 提醒</h2>
+        <div id="tripList"></div>
+      </section>
+      <footer class="about glass">
+        <h2>关于</h2>
+        <p>
+          本页为地点信息聚合工具：卡片内容为客观信息摘要（设施/交通/费用），每个地点附来源文章链接，出发前请点开原文或官方渠道核对最新情况。<br />
+          信息整理自公开游记文章（含公众号「真的叫啊珍」等），版权归原作者所有；本页不存储、不传播文章正文。
+        </p>
+      </footer>
+    </section>
+
+    <!-- 底部悬浮玻璃圆形按钮（扁平图标） -->
+    <div class="fabs">
+      <button id="fabMic" class="fab" aria-label="语音搜索"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 6 6.93V21h2v-3.07A7 7 0 0 0 19 11h-2a5 5 0 0 1-10 0H5z"/></svg></button>
+      <button id="fabAdd" class="fab fab-plus" aria-label="新建行程"><svg class="ic" viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status"></div>
+
+<!-- 快速新建行程 -->
+<dialog id="quickTrip">
+  <div class="d-top">
+    <h3>新建行程</h3>
+    <button id="qtClose" class="d-back">✕</button>
+  </div>
+  <div class="qt-body">
+    <label class="small dim" for="qtSpot">地点</label>
+    <select id="qtSpot"></select>
+    <label class="small dim" for="qtDate">日期</label>
+    <input type="date" id="qtDate" />
+    <label class="small dim" for="qtNote">备注（选填）</label>
+    <input type="text" id="qtNote" placeholder="如：带野餐垫" />
+    <button id="qtAdd" class="btn-create">添加到行程</button>
+    <span id="qtMsg" class="small dim"></span>
+  </div>
+</dialog>
+
+<!-- 界面2：地点详情 -->
+<dialog id="detailModal">
+  <div class="d-top">
+    <button id="detailClose" class="d-back" aria-label="返回">←</button>
+    <h3 class="d-headtitle">地点详情</h3>
+  </div>
+  <div class="d-pills">
+    <button class="pill small" data-jump="d-sec-intro">简介</button>
+    <button class="pill small" data-jump="d-sec-info">信息</button>
+    <button class="pill small" data-jump="d-sec-src">原文</button>
+  </div>
+  <div id="detailBody"></div>
+  <div class="d-bottom">
+    <button id="tripToggle" class="btn-create">安排出行</button>
+    <button id="favToggle" class="btn-save">稍后再去</button>
+  </div>
+  <div class="trip-add" id="tripForm" hidden>
+    <input type="date" id="tripDate" />
+    <input type="text" id="tripNote" placeholder="备注（选填）" />
+    <button id="tripAdd" class="btn-create small">添加</button>
+    <button id="tripCancel" class="btn-save small">收起</button>
+    <span id="tripMsg" class="small dim"></span>
+  </div>
+</dialog>
+
+<script src="js/data.js?v=20260930c"></script>
+<script src="js/spot_coords.js?v=20260930c"></script>
+<script src="js/articles_index.js?v=20260930c"></script>
+<script src="js/app.js?v=20260930c"></script>
+</body>
+</html>
